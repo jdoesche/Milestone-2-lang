@@ -1,0 +1,61 @@
+program = { division } ;
+division = static_division | dynamic_division | comment;
+static_division = "STATIC DIVISION." newline
+{ id_statement} ;
+id_statement = "PROGRAM-ID." identifier "." newline
+| "AUTHOR." string "." newline
+| "DATE-WRITTEN." string "." newline
+| constant
+| comment ;
+constant = "FIX" identifier "TO" expression "." ;
+dynamic_division = "DYNAMIC DIVISION." newline
+{ statement } ;
+statement = assignment
+| print_stmt
+| input_stmt
+| if_stmt
+| loop_stmt
+| call_stmt
+| function_def
+| random_stmt
+| comment ;
+assignment = "SET" identifier "TO" expression [ "AS" term ] "." ;
+print_stmt = "DISPLAY" output "." ;
+input_stmt = "PROMPT" identifier "WITH" string "." ;
+if_stmt = "IF" expression "THEN" newline
+indent { statement } dedent
+[ "ELSE" newline indent { statement } dedent ] ;
+loop_stmt = "START" identifier "AS" number "TO" number "DOING" newline
+indent { statement } dedent ;
+call_stmt = "CALL" identifier [ "WITH" arglist ] "." newline ;
+function_def = "FUNCTION" identifier [ "WITH" arglist ] "." newline
+indent { statement } dedent
+"RETURN" identifier "." ;
+random_stmt = "SET" identifier "TO RANDOM" number "TO" number "." ;
+arglist = expression { "," expression } ;
+output =string | identifier;
+expression = disjunction ;
+disjunction = conjunction { "OR" conjunction } ;
+conjunction = comparison { "AND" comparison } ;
+comparison = sum { ("==" | "!=" | "<" | "<=" | ">" | ">=") sum } ;
+sum = term { ("+" | "-") term } ;
+term = power { ("*" | "/" | "MOD") power } ;
+power = factor [ "**" power ] ;
+factor = number
+| identifier
+| "(" expression ")"
+| "-" factor ;
+identifier = letter { letter | digit | "_" } ;
+string = "\"" { character } "\"" ;
+number = [ "-" ] digit { digit } [ "." digit { digit } ] ;
+character = letter | digit | symbol ;
+symbol = "!" | "@" | "#" | "$" | "%" | "^" | "&" | "*" | "(" | ")" | "-"
+| "_" | "+" | "=" | "{" | "}" | "[" | "]" | "|" | "\\" | ":"
+| ";" | "'" | "," | "." | "/" | "<" | ">" | "?" | " " ;
+letter = "a".."z" | "A".."Z" ;
+digit = "0".."9" ;
+nonzero digit = “1”...”9”
+newline = "\n" ;
+indent = "\t" ;
+dedent = "" ;
+comment = "#" { character } newline ;
