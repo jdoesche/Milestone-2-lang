@@ -3,8 +3,6 @@ package skeptical;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 /**
  * This class hierarchy represents expressions in the abstract syntax tree
  * manipulated by this interpreter.
@@ -154,6 +152,10 @@ public interface AST {
         }
     }
 
+    public static abstract class Statement extends ASTNode {}
+
+    public static abstract class Exp extends ASTNode {}
+
     public interface Visitor<T> {
         T visit(Program p, Env env);
         T visit(StaDiv d, Env env);
@@ -162,6 +164,6 @@ public interface AST {
         T visit(Auth is, Env env);
         T visit(Date is, Env env);
         T visit(Const e, Env env);
-		T visit(Ident v, Env env);
+	T visit(Ident v, Env env);
 	}
 }
