@@ -152,6 +152,42 @@ public interface AST {
         	return visitor.visit(this, env);
     	}
      }
+    public static abstract class LiteralExp extends Exp {}
+    public static class NumExp extends LiteralExp {
+    	private final double value;
+
+    	public NumExp(double value) {
+        	this.value = value;
+    	}
+
+    	public double value() {
+        	return value;
+    	}
+
+    	@Override
+    	public <T> T accept(Visitor<T> visitor, Env env) {
+        	return visitor.visit(this, env);
+    	}
+     }
+     public static class StrExp extends LiteralExp {
+    	private final String value;
+
+    	public StrExp(String value) {
+        	this.value = value;
+    	}
+
+    	public String value() {
+        	return value;
+    	}
+
+    	@Override
+    	public <T> T accept(Visitor<T> visitor, Env env) {
+        	return visitor.visit(this, env);
+    	}
+     }
+
+
+
 
 
     public static abstract class Statement extends ASTNode {}
@@ -160,10 +196,13 @@ public interface AST {
         T visit(AST.Program p, Env env);
     	T visit(AST.StaticDivision d, Env env);
     	T visit(AST.DynamicDivision d, Env env);
-        T visit(AST.ProgId is, Env env);
-        T visit(AST.Auth is, Env env);
-        T visit(AST.Date is, Env env);
-        T visit(AST.Const e, Env env);
-	T visit(AST.IdExp v, Env env);
+        T visit(AST.ProgId sd, Env env);
+        T visit(AST.Auth sd, Env env);
+        T visit(AST.Date sd, Env env);
+        T visit(AST.Const sd, Env env);
+	T visit(AST.IdExp e, Env env);
+	T visit(AST.NumExp e, Env env);
+	T visit(AST.StrExp e, Env env);
+
 	}
 }
