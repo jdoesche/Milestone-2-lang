@@ -631,6 +631,8 @@ public interface AST {
 		public T visit(AST.MultExp e, Env env);
 		public T visit(AST.Program p, Env env);
 		public T visit(AST.Division e, Env env);
+		public T visit(AST.StaticDivision e, Env env);
+		public T visit(AST.DynamicDivision e, Env env);
 		public T visit(AST.SubExp e, Env env);
 		public T visit(AST.VarExp e, Env env);
 		public T visit(AST.LetExp e, Env env); // New for the varlang
