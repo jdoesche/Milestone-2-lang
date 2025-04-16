@@ -15,11 +15,50 @@ public interface AST {
 	public static abstract class ASTNode implements AST {
 		public abstract <T> T accept(Visitor<T> visitor, Env env);
 	}
+	
 	public static class Program extends ASTNode {
-		List<DefineDecl> _decls;
+		List <Division> _divisions;
+
+		public Program(List<Division> divisions) {
+			_divisions = divisions;
+		}
+
+		public List<Division> divisions() {
+			return _divisions;
+		}
+
+		@Override
+		public <T> T accept(Visitor<T> visitor, Env env) {
+			return visitor.visit(this, env)
+		}
+	}
+
+	public static abstract class Division extends ASTNode {
+		//common behavior for all divisions can go here
+	}
+
+	public static class StaticDivision extends Division {
+		List <DefineDecl> _idStatements;
+
+		public StaticDivision(List<DefineDecl> idStatements) {
+			_idStatements = idStatements;
+		}
+
+		public List<DefineDecl> idStatements() {
+			return _idStatements;
+		}
+
+		@Override
+		public <T> T accept (Visitor<T> visitor, Env env) {
+			return visitor.visit(this, env)
+		}
+	}
+
+	public static class DynamicDivision extends Division {
+		List <DefineDecl> _decls;
 		Exp _e;
 
-		public Program(List<DefineDecl>decls, Exp e) {
+		public DynamicDivision(List<DefineDecl> decls, Exp e) {
 			_decls = decls;
 			_e = e;
 		}
@@ -27,15 +66,17 @@ public interface AST {
 		public Exp e() {
 			return _e;
 		}
-		
+
 		public List<DefineDecl> decls() {
 			return _decls;
 		}
-		
+
 		public <T> T accept(Visitor<T> visitor, Env env) {
+	
 		}
 	}
-	public static abstract class Exp extends ASTNode {
+
+	public static abstract class Exp extends DynamicDivision {
 
 	}
 
@@ -589,6 +630,7 @@ public interface AST {
 		public T visit(AST.DivExp e, Env env);
 		public T visit(AST.MultExp e, Env env);
 		public T visit(AST.Program p, Env env);
+		public T visit(AST.Division e, Env env);
 		public T visit(AST.SubExp e, Env env);
 		public T visit(AST.VarExp e, Env env);
 		public T visit(AST.LetExp e, Env env); // New for the varlang
