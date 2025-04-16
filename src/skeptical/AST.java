@@ -119,11 +119,11 @@ public interface AST {
         }
     }
 
-    public static class Constant extends IDStatement {
+    public static class Const extends IDStatement {
         String identifier;
         Exp expression;
 
-        public Constant(String identifier, Exp expression) {
+        public Const(String identifier, Exp expression) {
             this.identifier = identifier;
             this.expression = expression;
         }
@@ -166,4 +166,3 @@ public interface AST {
         T visit(Date is, Env env);
         T visit(Const e, Env env);
 		T visit(Ident v, Env env);
-    }
