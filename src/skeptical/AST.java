@@ -185,10 +185,92 @@ public interface AST {
         	return visitor.visit(this, env);
     	}
      }
+    public static abstract class BinaryOpExp extends Exp {
+    	protected final Exp left;
+    	protected final Exp right;
 
+    	public BinaryOpExp(Exp left, Exp right) {
+        	this.left = left;
+        	this.right = right;
+    	}
 
+    	public Exp left() { return left; }
+    	public Exp right() { return right; }
+     }
+    
+     public static class DisjExp extends BinaryOpExp {
+    	public DisjExp(Exp left, Exp right) {
+        	super(left, right);
+    	}
 
+    	public <T> T accept(Visitor<T> visitor, Env env) {
+        	return visitor.visit(this, env);
+    	}
+     }
+    public static class ConjExp extends BinaryOpExp {
+    	public ConjExp(Exp left, Exp right) {
+        	super(left, right);
+    	}
 
+    	public <T> T accept(Visitor<T> visitor, Env env) {
+        	return visitor.visit(this, env);
+    	}
+     }
+
+     public static class CompExp extends BinaryOpExp {
+    	private final String operator;
+
+    	public CompExp(Exp left, String operator, Exp right) {
+        	super(left, right);
+        	this.operator = operator;
+    	}
+
+    	public String operator() { return operator; }
+
+    	public <T> T accept(Visitor<T> visitor, Env env) {
+        	return visitor.visit(this, env);
+    	}
+      }
+
+     public static class SumExp extends BinaryOpExp {
+    	private final String operator;
+
+    	public SumExp(Exp left, String operator, Exp right) {
+        	super(left, right);
+        	this.operator = operator;
+    	}
+
+    	public String operator() { return operator; }
+
+    	public <T> T accept(Visitor<T> visitor, Env env) {
+        	return visitor.visit(this, env);
+    	}
+    }
+
+    public static class TermExp extends BinaryOpExp {
+	private final String operator;
+
+    	public TermExp(Exp left, String operator, Exp right) {
+        	super(left, right);
+        	this.operator = operator;
+    	}
+
+    	public String operator() { return operator; }
+
+    	public <T> T accept(Visitor<T> visitor, Env env) {
+        	return visitor.visit(this, env);
+    	}
+     }
+
+    public static class PowExp extends BinaryOpExp {
+    	public PowExp(Exp left, Exp right) {
+        	super(left, right);
+    	}
+
+    	public <T> T accept(Visitor<T> visitor, Env env) {
+        	return visitor.visit(this, env);
+    	}
+    }
 
     public static abstract class Statement extends ASTNode {}
 
@@ -203,6 +285,12 @@ public interface AST {
 	T visit(AST.IdExp e, Env env);
 	T visit(AST.NumExp e, Env env);
 	T visit(AST.StrExp e, Env env);
+	T visit(AST.DisjExp e, Env env);
+	T visit(AST.ConjExp e, Env env);
+	T visit(AST.CompExp e, Env env);
+	T visit(AST.SumExp e, Env env);
+	T visit(AST.TermExp e, Env env);
+	T visit(AST.PowExp e, Env env);
 
 	}
 }
