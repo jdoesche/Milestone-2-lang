@@ -16,20 +16,21 @@ public interface AST {
     }
 
     public static class Program extends ASTNode {
-        List<Division> divisions;
+    StaticDivision _staticDiv;
+    DynamicDivision _dynamicDiv;
 
-        public Program(List<Division> divisions) {
-		this.divisions = divisions;
-        }
-
-        public List<Division> getDivisions() {
-            return divisions;
-        }
-
-        public <T> T accept(Visitor<T> visitor, Env env) {
-            return visitor.visit(this, env);
-        }
+    public Program(StaticDivision staticDiv, DynamicDivision dynamicDiv) {
+        _staticDiv = staticDiv;
+        _dynamicDiv = dynamicDiv;
     }
+
+    public StaticDivision staticDivision() { return _staticDiv; }
+    public DynamicDivision dynamicDivision() { return _dynamicDiv; }
+
+    public <T> T accept(Visitor<T> visitor, Env env) {
+        return visitor.visit(this, env);
+    }
+}
 
     public static abstract class Division extends ASTNode {}
 
@@ -151,8 +152,8 @@ public interface AST {
 
     public interface Visitor<T> {
         T visit(AST.Program p, Env env);
-        T visit(AST.StaDiv d, Env env);
-        T visit(AST.DynDiv d, Env env);
+    	T visit(AST.StaticDivision d, Env env);
+    	T visit(AST.DynamicDivision d, Env env);
         T visit(AST.ProgId is, Env env);
         T visit(AST.Auth is, Env env);
         T visit(AST.Date is, Env env);
