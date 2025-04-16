@@ -19,6 +19,7 @@ public interface AST {
         List<Division> divisions;
 
         public Program(List<Division> divisions) {
+		this.divisions = divisions;
         }
 
         public List<Division> getDivisions() {
