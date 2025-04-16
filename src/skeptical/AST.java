@@ -3,8 +3,6 @@ package skeptical;
 import java.util.ArrayList;
 import java.util.List;
 
-import skeptical.AST.CompoundArithExp;
-import skeptical.AST.Exp;
 
 
 /**
@@ -23,7 +21,6 @@ public interface AST {
         List<Division> divisions;
 
         public Program(List<Division> divisions) {
-            this.divisions = divisions;
         }
 
         public List<Division> getDivisions() {
