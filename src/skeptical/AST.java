@@ -67,6 +67,7 @@ public interface AST {
 
     public static abstract class IDStatement extends ASTNode {}
 
+
     public static class ProgId extends IDStatement {
         String name;
 
@@ -136,6 +137,7 @@ public interface AST {
             return visitor.visit(this, env);
         }
     }
+    public static abstract class Exp extends ASTNode {}
 
     public static class Ident extends Exp {
         String name;
@@ -154,8 +156,6 @@ public interface AST {
     }
 
     public static abstract class Statement extends ASTNode {}
-
-    public static abstract class Exp extends ASTNode {}
 
     public interface Visitor<T> {
         T visit(Program p, Env env);
