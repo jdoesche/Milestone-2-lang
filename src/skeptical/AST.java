@@ -115,29 +115,21 @@ public interface AST {
             return visitor.visit(this, env);
         }
     }
-
-    public static class Const extends IDStatement {
-        String identifier;
-        Exp expression;
-
-        public Const(String identifier, Exp expression) {
-            this.identifier = identifier;
-            this.expression = expression;
-        }
-
-        public String getIdentifier() {
-            return identifier;
-        }
-
-        public Exp getExpression() {
-            return expression;
-        }
-
-        public <T> T accept(Visitor<T> visitor, Env env) {
-            return visitor.visit(this, env);
-        }
-    }
     public static abstract class Exp extends ASTNode {}
+
+    public static class Const extends Exp {
+		private Exp _fst; 
+		private Exp _snd; 
+		public ConsExp(Exp fst, Exp snd){
+			_fst = fst;
+			_snd = snd;
+		}
+		public Exp fst() { return _fst; }
+		public Exp snd() { return _snd; }
+		public <T> T accept(Visitor<T> visitor, Env env) {
+			return visitor.visit(this, env);
+		}
+	}
 
     public static class Ident extends Exp {
         String name;
@@ -158,13 +150,13 @@ public interface AST {
     public static abstract class Statement extends ASTNode {}
 
     public interface Visitor<T> {
-        T visit(Program p, Env env);
-        T visit(StaDiv d, Env env);
-        T visit(DynDiv d, Env env);
-        T visit(ProgId is, Env env);
-        T visit(Auth is, Env env);
-        T visit(Date is, Env env);
-        T visit(Const e, Env env);
-	T visit(Ident v, Env env);
+        T visit(AST.Program p, Env env);
+        T visit(AST.StaDiv d, Env env);
+        T visit(AST.DynDiv d, Env env);
+        T visit(AST.ProgId is, Env env);
+        T visit(AST.Auth is, Env env);
+        T visit(AST.Date is, Env env);
+        T visit(AST.Const e, Env env);
+	T visit(AST.Ident v, Env env);
 	}
 }
