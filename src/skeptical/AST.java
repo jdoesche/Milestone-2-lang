@@ -35,13 +35,13 @@ public interface AST {
     public static abstract class Division extends ASTNode {}
 
     public static class StaDiv extends Division {
-        List<IDStatement> statements;
+        List<StaDecl> statements;
 
-        public StaDiv(List<IDStatement> statements) {
+        public StaDiv(List<StaDecl> statements) {
             this.statements = statements;
         }
 
-        public List<IDStatement> getStatements() {
+        public List<StaDecl> getStatements() {
             return statements;
         }
 
@@ -66,10 +66,10 @@ public interface AST {
         }
     }
 
-    public static abstract class IDStatement extends ASTNode {}
+    public static abstract class StaDecl extends ASTNode {}
 
 
-    public static class ProgId extends IDStatement {
+    public static class ProgId extends StaDecl {
         String name;
 
         public ProgId(String name){
@@ -85,7 +85,7 @@ public interface AST {
         }
     }
 
-    public static class Auth extends IDStatement {
+    public static class Auth extends StaDecl {
         String name;
 
         public Auth(String name) {
@@ -101,7 +101,7 @@ public interface AST {
         }
     }
 
-    public static class Date extends IDStatement {
+    public static class Date extends StaDecl {
         String date;
 
         public Date(String date) {
@@ -116,37 +116,43 @@ public interface AST {
             return visitor.visit(this, env);
         }
     }
+
+    public static class Const extends StaDecl {
+    	private final String id;      // For example, "LIMIT"
+    	private final Exp value;      // For example, a ConstExp(5)
+
+   	 public Const(String id, Exp value) {
+        	this.id = id;
+        	this.value = value;
+    	}
+
+    	public String id() { return id; }
+   	public Exp value() { return value; }
+
+    	@Override
+    	public <T> T accept(Visitor<T> visitor, Env env) {
+        	return visitor.visit(this, env);
+    	}
+     }
     public static abstract class Exp extends ASTNode {}
 
-    public static class Const extends Exp {
-		private Exp _fst; 
-		private Exp _snd; 
-		public ConsExp(Exp fst, Exp snd){
-			_fst = fst;
-			_snd = snd;
-		}
-		public Exp fst() { return _fst; }
-		public Exp snd() { return _snd; }
-		public <T> T accept(Visitor<T> visitor, Env env) {
-			return visitor.visit(this, env);
-		}
-	}
+    public static class IdExp extends Exp {
+    	private final String id;
 
-    public static class Ident extends Exp {
-        String name;
+    	public IdExp(String id) {
+        	this.id = id;
+    	}
 
-        public Ident(String name) {
-            this.name = name;
-        }
+    	public String id() {
+        	return id;
+    	}
 
-        public String  getName() {
-            return name;
-        }
+    	@Override
+    	public <T> T accept(Visitor<T> visitor, Env env) {
+        	return visitor.visit(this, env);
+    	}
+     }
 
-        public <T> T accept(Visitor<T> visitor, Env env) {
-            return visitor.visit(this, env);
-        }
-    }
 
     public static abstract class Statement extends ASTNode {}
 
@@ -158,6 +164,6 @@ public interface AST {
         T visit(AST.Auth is, Env env);
         T visit(AST.Date is, Env env);
         T visit(AST.Const e, Env env);
-	T visit(AST.Ident v, Env env);
+	T visit(AST.IdExp v, Env env);
 	}
 }
