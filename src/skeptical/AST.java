@@ -16,16 +16,16 @@ public interface AST {
     }
 
     public static class Program extends ASTNode {
-    StaticDivision _staticDiv;
-    DynamicDivision _dynamicDiv;
+    StaDiv _staticDiv;
+    DynDiv _dynamicDiv;
 
-    public Program(StaticDivision staticDiv, DynamicDivision dynamicDiv) {
+    public Program(StaDiv staticDiv, DynDiv dynamicDiv) {
         _staticDiv = staticDiv;
         _dynamicDiv = dynamicDiv;
     }
 
-    public StaticDivision staticDivision() { return _staticDiv; }
-    public DynamicDivision dynamicDivision() { return _dynamicDiv; }
+    public StaDiv staticDivision() { return _staticDiv; }
+    public DynDiv dynamicDivision() { return _dynamicDiv; }
 
     public <T> T accept(Visitor<T> visitor, Env env) {
         return visitor.visit(this, env);
