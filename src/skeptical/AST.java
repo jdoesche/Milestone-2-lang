@@ -272,6 +272,67 @@ public interface AST {
     	}
     }
 
+    public static class FactorExp extends Exp {
+    	private Exp expr;  // This can be a number, identifier, GroupingExp, or UnaryOpExp
+
+    	// Constructor for all types of factors
+    	public FactorExp(Exp expr) {
+        	this.expr = expr;
+    	}
+
+    	public Exp getExpr() {
+       	 return expr;
+    	}
+
+   	 @Override
+    	public <T> T accept(Visitor<T> visitor, Env env) {
+        	return visitor.visit(this, env);
+    	}
+     }
+    public static class GroupExp extends Exp {
+   	 private Exp expr;  // The expression inside the parentheses
+
+    	// Constructor for grouping expression
+    	public GroupExp(Exp expr) {
+        	this.expr = expr;
+    	}
+
+    	public Exp getExpr() {
+        	return expr;
+    	}
+
+    	@Override
+    	public <T> T accept(Visitor<T> visitor, Env env) {
+        	return visitor.visit(this, env);
+    	}
+     }
+    public static class UnaryOpExp extends Exp {
+    	private String operator;  // The operator (e.g., "-")
+    	private Exp expr;         // The expression to which the unary operator is applied
+
+    	// Constructor for unary operator
+    	public UnaryOpExp(String operator, Exp expr) {
+        	this.operator = operator;
+        	this.expr = expr;
+    	}
+
+    	public String getOperator() {
+        	return operator;
+    	}
+
+    	public Exp getExpr() {
+        	return expr;
+    	}
+
+    	@Override
+    	public <T> T accept(Visitor<T> visitor, Env env) {
+        	return visitor.visit(this, env);
+    	}
+     }
+
+
+
+
     public static abstract class Statement extends ASTNode {}
 
     public interface Visitor<T> {
@@ -291,6 +352,9 @@ public interface AST {
 	T visit(AST.SumExp e, Env env);
 	T visit(AST.TermExp e, Env env);
 	T visit(AST.PowExp e, Env env);
+	T visit(AST.FactorExp f, Env env);
+   	T visit(AST.GroupExp g, Env env);
+    	T visit(AST.UnaryOpExp o, Env env);
 
 	}
 }
