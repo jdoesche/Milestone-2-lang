@@ -28,7 +28,7 @@ stadecl returns [StaDecl ast]
   ;
 constant returns [StaDecl ast]
 @init { Exp valueExp = null; }
-  : "FIX" id=identifier "TO" e=exp
+  : "FIX" id=Identifier "TO" e=exp
     {
       if (e.ast instanceof IdExp) {
         throw new RuntimeException("Cannot assign constant to a variable reference like '" + ((IdExp)e.ast).id() + "'");
@@ -55,7 +55,7 @@ assign returns [Statement ast]
     @init {
         $assignment = new Assign(); // Start with a blank Assign object
     }
-  : 'SET' id=identifier 'TO' expr=exp 
+  : 'SET' id=Identifier 'TO' expr=exp 
     {
         $assignment.setIdentifier($id.text);
         $assignment.setExpression($expr.ast);
