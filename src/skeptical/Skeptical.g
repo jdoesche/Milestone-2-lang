@@ -21,9 +21,9 @@ dynamic_division returns [DynDiv ast]
     { $ast = new DynDiv($statements); }
   ;
 stadecl returns [StaDecl ast]
-  : "PROGRAM-ID." id=identifier "." NEWLINE { $ast = new ProgId($id.text); }
-  | "AUTHOR." s=string "." NEWLINE { $ast = new Auth($s.text); }
-  | "DATE-WRITTEN." s=string "." NEWLINE { $ast = new Date($s.text); }
+  : "PROGRAM-ID." id=Identifier "." NEWLINE { $ast = new ProgId($id.text); }
+  | "AUTHOR." s=String "." NEWLINE { $ast = new Auth($s.text); }
+  | "DATE-WRITTEN." s=String "." NEWLINE { $ast = new Date($s.text); }
   | constant { $ast = $constant.ast; }
   ;
 constant returns [StaDecl ast]
@@ -60,7 +60,7 @@ assign returns [Statement ast]
         $assignment.setIdentifier($id.text);
         $assignment.setExpression($expr.ast);
     }
-    ('AS' value=(string | number)
+    ('AS' value=(String | Number)
         { $assignment.setType($value.text); }
     )? 
     '.'
