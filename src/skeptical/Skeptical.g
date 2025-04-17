@@ -49,9 +49,11 @@ statement returns [Statement ast]
   | fd=funcdef { $ast = $fd.ast; }
   | rs=rand { $ast = $rs.ast; }
   ;
-assignment returns [Statement ast]
+
+
+assign returns [Statement ast]
   : 'SET' id=identifier 'TO' expr=exp
-    { $ast = new Assignment($id.text, $expr.ast }
+    { $ast = new Assign($id.text, $expr.ast }
 ('AS' term=identifier
 {$term != null ? $term.text : null); })?
 "."
