@@ -20,6 +20,23 @@ dynamic_division returns [DynDiv ast]
     (state=statement { $statements.add($state.ast); })*  // Repeatable list of statements in dynamic division
     { $ast = new DynDiv($statements); }
   ;
+stadecl returns [StaDecl ast]
+  : "PROGRAM-ID." id=identifier "." NEWLINE { $ast = new ProgId($id.text); }
+  | "AUTHOR." s=string "." NEWLINE { $ast = new Auth($s.text); }
+  | "DATE-WRITTEN." s=string "." NEWLINE { $ast = new Date($s.text); }
+  | constant { $ast = $constant.ast; }
+  ;
+constant returns [StaDecl ast]
+@init { Exp valueExp = null; }
+  : "FIX" id=identifier "TO" e=exp
+    {
+      if (e.ast instanceof IdExp) {
+        throw new RuntimeException("Cannot assign constant to a variable reference like '" + ((IdExp)e.ast).id() + "'");
+      }
+      $ast = new Const($id.text, e.ast);
+    }
+    "."
+  ;
 
 
 
