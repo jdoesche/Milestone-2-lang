@@ -42,8 +42,8 @@ constant returns [StaDecl ast]
 statement returns [Statement ast]
   : as=assign { $ast = $as.ast; }
   | pr=print { $ast = $pr.ast; }
-  | in=input { $ast = $in.ast; }
-  | if=ifstmt { $ast = $if.ast; }
+  | is=input { $ast = $is.ast; }
+  | ifs=ifstmt { $ast = $ifs.ast; }
   | ls=loop_stmt { $ast = $ls.ast; }
   | cs=callstmt { $ast = $cs.ast; }
   | fd=funcdef { $ast = $fd.ast; }
