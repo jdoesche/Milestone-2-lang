@@ -357,7 +357,7 @@ public interface AST {
      }
 
 	
-     public static class PrintS extends Statement {
+     public static class Print extends Statement {
     	private String output; // could be a string literal or identifier
 
     	public Print(String output) {
