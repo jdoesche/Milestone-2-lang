@@ -39,6 +39,22 @@ constant returns [StaDecl ast]
   ;
 
 
+statement returns [Statement ast]
+  : as=assign { $ast = $as.ast; }
+  | pr=print { $ast = $pr.ast; }
+  | in=input { $ast = $in.ast; }
+  | if=ifstmt { $ast = $if.ast; }
+  | ls=loop_stmt { $ast = $ls.ast; }
+  | cs=callstmt { $ast = $cs.ast; }
+  | fd=funcdef { $ast = $fd.ast; }
+  | rs=rand { $ast = $rs.ast; }
+  ;
+assignment returns [Statement ast]
+  : 'SET' id=identifier 'TO' expr=exp [ 'AS' term=identifier ] '.'
+    { $ast = new Assignment($id.text, $expr.ast, $term != null ? $term.text : null); }
+  ;
+
+
 
 
  Identifier :   Letter LetterOrDigit*;
