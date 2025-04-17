@@ -335,6 +335,28 @@ public interface AST {
 
     public static abstract class Statement extends ASTNode {}
 
+    public static class AssignmentStmt extends Statement {
+    	private String identifier;
+    	private Exp expression;
+    	private String type; // Optional "AS" type term (optional)
+
+    	public AssignmentStmt(String identifier, Exp expression, String type) {
+        	this.identifier = identifier;
+        	this.expression = expression;
+        	this.type = type;
+    	}
+
+    	public String getIdentifier() { return identifier; }
+    	public Exp getExpression() { return expression; }
+    	public String getType() { return type; }
+
+    	@Override
+    	public <T> T accept(Visitor<T> visitor, Env env) {
+        	return visitor.visit(this, env);
+    	}
+     }
+
+
     public interface Visitor<T> {
         T visit(AST.Program p, Env env);
     	T visit(AST.StaticDivision d, Env env);
