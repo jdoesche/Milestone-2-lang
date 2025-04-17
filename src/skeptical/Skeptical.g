@@ -53,9 +53,10 @@ statement returns [Statement ast]
 
 assign returns [Statement ast]
   : 'SET' id=identifier 'TO' expr=exp
-    { $ast = new Assign($id.text, $expr.ast }
+    
 ('AS' term=identifier
-{$term != null ? $term.text : null); })?
+{$ast = new Assign($term.ast))?
+{ $ast = new Assign($id.text, $expr.ast }
 "."
   ;
 
