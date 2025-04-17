@@ -63,7 +63,7 @@ assign returns [Statement ast]
 assign returns [Statement ast]
     locals [Assign assignment]
     @init {
-        $assign = new Assign(); // Start with a blank Assign object
+        $assignment = new Assign(); // Start with a blank Assign object
     }
   : 'SET' id=identifier 'TO' expr=exp 
     {
