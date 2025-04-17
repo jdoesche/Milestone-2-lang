@@ -27,5 +27,5 @@ dynamic_division returns [DynDiv ast]
 
 
 
-
+Newline : '\n';
 Comment :  '#' ~[\r\n]* -> skip;
