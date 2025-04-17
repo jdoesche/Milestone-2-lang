@@ -335,12 +335,12 @@ public interface AST {
 
     public static abstract class Statement extends ASTNode {}
 
-    public static class AssignmentStmt extends Statement {
+    public static class Assign extends Statement {
     	private String identifier;
     	private Exp expression;
     	private String type; // Optional "AS" type term (optional)
 
-    	public AssignmentStmt(String identifier, Exp expression, String type) {
+    	public Assign(String identifier, Exp expression, String type) {
         	this.identifier = identifier;
         	this.expression = expression;
         	this.type = type;
@@ -355,6 +355,153 @@ public interface AST {
         	return visitor.visit(this, env);
     	}
      }
+
+	
+     public static class PrintS extends Statement {
+    	private String output; // could be a string literal or identifier
+
+    	public Print(String output) {
+        	this.output = output;
+    	}
+
+    	public String getOutput() { return output; }
+
+    	@Override
+    	public <T> T accept(Visitor<T> visitor, Env env) {
+        	return visitor.visit(this, env);
+    	}
+     }
+
+	
+     public static class Input extends Statement {
+    	private String identifier;
+    	private String prompt;
+
+   	 public Input(String identifier, String prompt) {
+        	this.identifier = identifier;
+        	this.prompt = prompt;
+    	}
+
+    	public String getIdentifier() { return identifier; }
+    	public String getPrompt() { return prompt; }
+
+    	@Override
+    	public <T> T accept(Visitor<T> visitor, Env env) {
+        	return visitor.visit(this, env);
+    	}
+      }
+
+	
+      public static class IfStmt extends Statement {
+    	private Exp condition;
+    	private List<Statement> thenBranch;
+    	private List<Statement> elseBranch; // can be null if no else
+
+    	public IfStmt(Exp condition, List<Statement> thenBranch, List<Statement> elseBranch) {
+        	this.condition = condition;
+        	this.thenBranch = thenBranch;
+        	this.elseBranch = elseBranch;
+    	}
+
+    	public Exp getCondition() { return condition; }
+    	public List<Statement> getThenBranch() { return thenBranch; }
+    	public List<Statement> getElseBranch() { return elseBranch; }
+
+    	@Override
+    	public <T> T accept(Visitor<T> visitor, Env env) {
+        	return visitor.visit(this, env);
+    	}
+      }
+
+	
+      public static class LoopStmt extends Statement {
+   	 private String identifier;
+    	 private int startValue;
+   	 private int endValue;
+   	 private List<Statement> body;
+
+   	 public LoopStmt(String identifier, int startValue, int endValue, List<Statement> body) {
+         	this.identifier = identifier;
+         	this.startValue = startValue;
+         	this.endValue = endValue;
+         	this.body = body;
+    	 }
+
+   	 public String getIdentifier() { return identifier; }
+   	 public int getStartValue() { return startValue; }
+   	 public int getEndValue() { return endValue; }
+   	 public List<Statement> getBody() { return body; }
+
+   	 @Override
+   	 public <T> T accept(Visitor<T> visitor, Env env) {
+        	return visitor.visit(this, env);
+    	 }
+       }
+	
+       public static class CallStmt extends Statement {
+    	  private String identifier;
+    	  private List<Exp> arguments; // can be empty if no arguments
+
+   	   public CallStmt(String identifier, List<Exp> arguments) {
+        	this.identifier = identifier;
+        	this.arguments = arguments;
+    	   }
+
+   	    public String getIdentifier() { return identifier; }
+   	    public List<Exp> getArguments() { return arguments; }
+
+   	   @Override
+   	   public <T> T accept(Visitor<T> visitor, Env env) {
+        	return visitor.visit(this, env);
+    	   }
+       }
+
+      public static class FuncDef extends Statement {
+    	   private String name;
+ 	   private List<String> parameters;
+ 	   private List<Statement> body;
+ 	   private String returnIdentifier;
+
+ 	   public FuncDef(String name, List<String> parameters, List<Statement> body, String returnIdentifier) {
+        	this.name = name;
+        	this.parameters = parameters;
+        	this.body = body;
+        	this.returnIdentifier = returnIdentifier;
+ 	   }
+
+ 	   public String getName() { return name; }
+ 	   public List<String> getParameters() { return parameters; }
+ 	   public List<Statement> getBody() { return body; }
+ 	   public String getReturnIdentifier() { return returnIdentifier; }
+
+ 	   @Override
+ 	   public <T> T accept(Visitor<T> visitor, Env env) {
+        	return visitor.visit(this, env);
+ 	   }
+       }
+
+
+       public static class Rand extends Statement {
+ 	   private String identifier;
+ 	   private int min;
+ 	   private int max;
+
+ 	   public Rand(String identifier, int min, int max) {
+        	this.identifier = identifier;
+        	this.min = min;
+        	this.max = max;
+ 	   }
+
+  	  public String getIdentifier() { return identifier; }
+ 	   public int getMin() { return min; }
+ 	   public int getMax() { return max; }
+
+ 	   @Override
+ 	   public <T> T accept(Visitor<T> visitor, Env env) {
+     		return visitor.visit(this, env);
+    	    }
+        }
+
 
 
     public interface Visitor<T> {
@@ -374,9 +521,16 @@ public interface AST {
 	T visit(AST.SumExp e, Env env);
 	T visit(AST.TermExp e, Env env);
 	T visit(AST.PowExp e, Env env);
-	T visit(AST.FactorExp f, Env env);
-   	T visit(AST.GroupExp g, Env env);
-    	T visit(AST.UnaryOpExp o, Env env);
-
+	T visit(AST.FactorExp e, Env env);
+   	T visit(AST.GroupExp e, Env env);
+    	T visit(AST.UnaryOpExp e, Env env);
+	T visit(AST.Assign dd, Env env);
+	T visit(AST.Print dd, Env env);
+	T visit(AST.Input dd, Env env);
+	T visit(AST.IfStmt dd, Env env);
+	T visit(AST.LoopStmt dd, Env env);
+	T visit(AST.CallStmt dd, Env env);
+	T visit(AST.FuncDef dd, Env env);
+	T visit(AST.Rand dd, Env env);
 	}
 }
