@@ -50,8 +50,11 @@ statement returns [Statement ast]
   | rs=rand { $ast = $rs.ast; }
   ;
 assignment returns [Statement ast]
-  : 'SET' id=identifier 'TO' expr=exp [ 'AS' term=identifier ] '.'
-    { $ast = new Assignment($id.text, $expr.ast, $term != null ? $term.text : null); }
+  : 'SET' id=identifier 'TO' expr=exp
+    { $ast = new Assignment($id.text, $expr.ast }
+('AS' term=identifier
+{$term != null ? $term.text : null); })?
+"."
   ;
 
 
