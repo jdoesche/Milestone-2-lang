@@ -14,7 +14,7 @@ static_division returns [StaDiv ast]
     { $ast = new StaDiv($decls);}
   ;
 dynamic_division returns [DynDiv ast]
-    locals [List<Statement> statements]
+    locals [ArrayList<Statement> statements]
     @init { $statements = new ArrayList<Statement>(); }
   : 'DYNAMIC' 'DIVISION.' NEWLINE
     (state=statement { $statements.add($state.ast); })*  // Repeatable list of statements in dynamic division
