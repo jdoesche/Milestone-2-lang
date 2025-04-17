@@ -41,6 +41,69 @@ public class Evaluator implements Visitor<Value> {
 		
 		return initEnv;
 	}
+
+	@Override
+	public Value visit(AST.AddExp e, Env env) {
+		NumValue left = (NumValue) e.left().accept(this, env);
+		NumValue right = (NumValue) e.right().accept(this, env);
+		return new NumValue(left.v() + right.v());
+	}
+
+	@Override
+	public Value visit(AST.SubExp e, Env env) {
+		NumValue left = (NumValue) e.left().accept(this, env);
+		NumValue right = (NumValue) e.right().accept(this, env);
+		return new NumValue(left.v() - right.v());
+	}
+
+	@Override
+	public Value visit(AST.MultExp e, Env env) {
+		NumValue left = (NumValue) e.left().accept(this, env);
+		NumValue right = (NumValue) e.right().accept(this, env);
+		return new NumValue(left.v() * right.v());
+	}
+
+	@Override
+	public Value visit(AST.DivExp e, Env env) {
+		NumValue left = (NumValue) e.left().accept(this, env);
+		NumValue right = (NumValue) e.right().accept(this, env);
+		return new NumValue(left.v() / right.v());
+	}
+
+	@Override
+	public Value visit(AST.PowExp e, Env env) {
+		NumValue left = (NumValue) e.left().accept(this, env);
+		NumValue right = (NumValue) e.right().accept(this, env);
+		return new NumValue(Math.pow(left.v(), right.v()));
+	}
+
+	@Override
+	public Value visit(AST.EqExp e, Env env) {
+		NumValue left = (NumValue) e.left().accept(this, env);
+		NumValue right = (NumValue) e.right().accept(this, env);
+		return new NumValue(left.v() == right.v());
+	}
+
+	@Override
+	public Value visit(AST.NeqExp e, Env env) {
+		NumValue left = (NumValue) e.left().accept(this, env);
+		NumValue right = (NumValue) e.right().accept(this, env);
+		return new NumValue(left.v() != right.v());
+	}
+
+	@Override
+	public Value visit(AST.LessExp e, Env env) {
+		NumValue left = (NumValue) e.left().accept(this, env);
+		NumValue right = (NumValue) e.right().accept(this, env);
+		return new NumValue(left.v() < right.v());
+	}
+
+	@Override
+	public Value visit(AST.GreaterExp e, Env env) {
+		NumValue left = (NumValue) e.left().accept(this, env);
+		NumValue right = (NumValue) e.right().accept(this, env);
+		return new NumValue(left.v() > right.v());
+	}
 	
 	Reader _reader; 
 	public Evaluator(Reader reader) {
