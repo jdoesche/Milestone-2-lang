@@ -50,16 +50,6 @@ statement returns [Statement ast]
   | rs=rand { $ast = $rs.ast; }
   ;
 
-
-assign returns [Statement ast]
-  : 'SET' id=identifier 'TO' expr=exp
-    
-('AS' term=identifier
-{$ast = new Assign($term.ast))?
-{ $ast = new Assign($id.text, $expr.ast }
-"."
-  ;
-
 assign returns [Statement ast]
     locals [Assign assignment]
     @init {
