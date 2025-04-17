@@ -335,16 +335,16 @@ public interface AST {
 
     public static abstract class Statement extends ASTNode {}
 
-    public static class Assign extends Statement {
+    public static class Assign extends Statement { 
     	private String identifier;
     	private Exp expression;
-    	private String type; // Optional "AS" type term (optional)
+    	private String type; // Optional
 
-    	public Assign(String identifier, Exp expression, String type) {
-        	this.identifier = identifier;
-        	this.expression = expression;
-        	this.type = type;
-    	}
+    	public Assign() { }
+
+    	public void setIdentifier(String identifier) { this.identifier = identifier; }
+    	public void setExpression(Exp expression) { this.expression = expression; }
+    	public void setType(String type) { this.type = type; }
 
     	public String getIdentifier() { return identifier; }
     	public Exp getExpression() { return expression; }
@@ -355,6 +355,7 @@ public interface AST {
         	return visitor.visit(this, env);
     	}
      }
+
 
 	
      public static class Print extends Statement {
