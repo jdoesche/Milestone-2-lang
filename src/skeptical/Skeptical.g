@@ -60,6 +60,23 @@ assign returns [Statement ast]
 "."
   ;
 
+assign returns [Statement ast]
+    locals [Assign assignment]
+    @init {
+        $assign = new Assign(); // Start with a blank Assign object
+    }
+  : 'SET' id=identifier 'TO' expr=exp 
+    {
+        $assignment.setIdentifier($id.text);
+        $assignment.setExpression($expr.ast);
+    }
+    ('AS' value=(string | number)
+        { $assignment.setType($value.text); }
+    )? 
+    '.'
+    { $ast = $assignment; }
+  ;
+
 
 
 
