@@ -37,9 +37,11 @@ class StaDiv extends Division {
 class DynDiv extends Division {
     public ArrayList<Statement> statements;
 
+    public DynDiv(ArrayList<Statement> statements) {  // Add the constructor
         this.statements = statements;
     }
 }
+
 
 class StaDecl extends ASTNode {
     public String Identifier;
@@ -52,12 +54,12 @@ class StaDecl extends ASTNode {
 abstract class Statement extends ASTNode {}
 
 class Assign extends Statement {
-    public String Identifier;
+    public String identifier;
     public Expression expression;
     public String term;
 
     public Assign(String identifier, Expression expression, String term) {
-        this.Identifier = Identifier;
+        this.Identifier = identifier;
         this.expression = expression;
         this.term = term;
     }
@@ -72,7 +74,7 @@ class Print extends Statement {
 }
 
 class Input extends Statement {
-    public String (Identifier;
+    public String identifier;
     public String prompt;
 
     public Input(String identifier, String prompt) {
@@ -80,6 +82,7 @@ class Input extends Statement {
         this.prompt = prompt;
     }
 }
+
 
 class IfStmt extends Statement {
     public Expression condition;
@@ -132,13 +135,13 @@ class FuncDef extends Statement {
 }
 
 class Rand extends Statement {
-    public String Identifier;
+    public String identifier;
     public int min;
     public int max;
 
     // Constructor
     public Rand(String iIentifier, int min, int max) {
-        this.Identifier = Identifier;
+        this.Identifier = identifier;
         this.min = min;
         this.max = max;
     }
