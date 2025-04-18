@@ -8,232 +8,112 @@ import java.util.Map;
 
 import static skeptical.AST.*;
 import static skeptical.Value.*;
-import skeptical.Env.*; 
-import skeptical.ASTNode.*;
+
+import java.util.List;
+import java.util.ArrayList;
+import java.io.File;
+import java.io.IOException;
+
+import skeptical.Env.*;
 
 
-// Base AST Node
-abstract class ASTNode {}
+public class Evaluator implements Visitor<Value> {
+	
+	Printer.Formatter ts = new Printer.Formatter();
 
-// Statements
-class Program extends ASTNode {
-    public Division division;
+	Env initEnv = initialEnv(); //New for definelang
+	
+	Value valueOf(Program p) {
+			return (Value) p.accept(this, initEnv);
+	}
 
-    public Program(Division division) {
-        this.division = division;
-    }
+  private Env initialEnv() {
+		GlobalEnv initEnv = new GlobalEnv();
+		
+		/* Procedure: (read <filename>). Following is same as (define read (lambda (file) (read file))) */
+		List<String> formals = new ArrayList<>();
+		formals.add("file");
+		Exp body = new AST.ReadExp(new VarExp("file"));
+		Value.FunVal readFun = new Value.FunVal(initEnv, formals, body);
+		initEnv.extend("read", readFun);
+
+		/* Procedure: (require <filename>). Following is same as (define require (lambda (file) (eval (read file)))) */
+		formals = new ArrayList<>();
+		formals.add("file");
+		body = new EvalExp(new AST.ReadExp(new VarExp("file")));
+		Value.FunVal requireFun = new Value.FunVal(initEnv, formals, body);
+		initEnv.extend("require", requireFun);
+		
+		/* Add new built-in procedures here */ 
+		
+		return initEnv;
+	}
+
+	@Override
+	public Value visit(AST.AddExp e, Env env) {
+		NumValue left = (NumValue) e.left().accept(this, env);
+		NumValue right = (NumValue) e.right().accept(this, env);
+		return new NumValue(left.v() + right.v());
+	}
+
+	@Override
+	public Value visit(AST.SubExp e, Env env) {
+		NumValue left = (NumValue) e.left().accept(this, env);
+		NumValue right = (NumValue) e.right().accept(this, env);
+		return new NumValue(left.v() - right.v());
+	}
+
+	@Override
+	public Value visit(AST.MultExp e, Env env) {
+		NumValue left = (NumValue) e.left().accept(this, env);
+		NumValue right = (NumValue) e.right().accept(this, env);
+		return new NumValue(left.v() * right.v());
+	}
+
+	@Override
+	public Value visit(AST.DivExp e, Env env) {
+		NumValue left = (NumValue) e.left().accept(this, env);
+		NumValue right = (NumValue) e.right().accept(this, env);
+		return new NumValue(left.v() / right.v());
+	}
+
+	@Override
+	public Value visit(AST.PowExp e, Env env) {
+		NumValue left = (NumValue) e.left().accept(this, env);
+		NumValue right = (NumValue) e.right().accept(this, env);
+		return new NumValue(Math.pow(left.v(), right.v()));
+	}
+
+	@Override
+	public Value visit(AST.EqExp e, Env env) {
+		NumValue left = (NumValue) e.left().accept(this, env);
+		NumValue right = (NumValue) e.right().accept(this, env);
+		return new NumValue(left.v() == right.v());
+	}
+
+	@Override
+	public Value visit(AST.NeqExp e, Env env) {
+		NumValue left = (NumValue) e.left().accept(this, env);
+		NumValue right = (NumValue) e.right().accept(this, env);
+		return new NumValue(left.v() != right.v());
+	}
+
+	@Override
+	public Value visit(AST.LessExp e, Env env) {
+		NumValue left = (NumValue) e.left().accept(this, env);
+		NumValue right = (NumValue) e.right().accept(this, env);
+		return new NumValue(left.v() < right.v());
+	}
+
+	@Override
+	public Value visit(AST.GreaterExp e, Env env) {
+		NumValue left = (NumValue) e.left().accept(this, env);
+		NumValue right = (NumValue) e.right().accept(this, env);
+		return new NumValue(left.v() > right.v());
+	}
+	
+	Reader _reader; 
+	public Evaluator(Reader reader) {
+		_reader = reader;
+	}
 }
-
-abstract class Division extends ASTNode {}
-
-class StaDiv extends Division {
-    public ArrayList<StaDecl> idStatements;
-
-    public StaticDivision(ArrayList<StaDecl> idStatements) {
-        this.idStatements = idStatements;
-    }
-}
-
-class DynDiv extends Division {
-    public ArrayList<Statement> statements;
-
-    public DynamicDivision(ArrayList<Statement> statements) {
-        this.statements = statements;
-    }
-}
-
-class StaDecl extends ASTNode {
-    public String Identifier;
-
-    public StaDecl(String identifier) {
-        this.Identifier = Identifier;
-    }
-}
-
-abstract class Statement extends ASTNode {}
-
-class Assign extends Statement {
-    public String Identifier;
-    public Expression expression;
-    public String term;
-
-    public Assign(String identifier, Expression expression, String term) {
-        this.Identifier = Identifier;
-        this.expression = expression;
-        this.term = term;
-    }
-}
-
-class Print extends Statement {
-    public Output output;
-
-    public Print(Output output) {
-        this.output = output;
-    }
-}
-
-class Input extends Statement {
-    public String (Identifier;
-    public String prompt;
-
-    public Input(String identifier, String prompt) {
-        this.identifier = identifier;
-        this.prompt = prompt;
-    }
-}
-
-class IfStmt extends Statement {
-    public Expression condition;
-    public ArrayList<Statement> trueBranch;
-    public ArrayList<Statement> falseBranch;
-
-    public IfStmt(Expression condition, ArrayList<Statement> trueBranch, ArrayList<Statement> falseBranch) {
-        this.condition = condition;
-        this.trueBranch = trueBranch;
-        this.falseBranch = falseBranch;
-    }
-}
-
-class LoopStmt extends Statement {
-    public String Identifier;
-    public int start;
-    public int end;
-    public ArrayList<Statement> body;
-
-    public LoopStmt(String identifier, int start, int end, ArrayList<Statement> body) {
-        this.Identifier = Identifier;
-        this.start = start;
-        this.end = end;
-        this.body = body;
-    }
-}
-
-class CallStmt extends Statement {
-    public String functionName;
-    public ArrayList<Expression> arguments;
-
-    public CallStmt(String functionName, V<Expression> arguments) {
-        this.functionName = functionName;
-        this.arguments = arguments;
-    }
-}
-
-class FuncDef extends Statement {
-    public String functionName;
-    public ArrayList<Expression> arguments;
-    public ArrayList<Statement> body;
-    public String returnVar;
-
-    public FuncDef(String functionName, ArrayList<Expression> arguments, ArrayList<Statement> body, String returnVar) {
-        this.functionName = functionName;
-        this.arguments = arguments;
-        this.body = body;
-        this.returnVar = returnVar;
-    }
-}
-
-class Rand extends Statement {
-    public String Identifier;
-    public int min;
-    public int max;
-
-    // Constructor
-    public Rand(String iIentifier, int min, int max) {
-        this.Identifier = Identifier;
-        this.min = min;
-        this.max = max;
-    }
-
-    // Method to generate a random number
-    public int generateRandom() {
-        Random rand = new Random();
-        return rand.nextInt((max - min) + 1) + min;  // Returns a value between min and max, inclusive
-    }
-}
-// Expressions
-abstract class Expression extends ASTNode {}
-
-class Disjunction extends Expression {
-    public ArrayList<Conjunction> conjunctions;
-
-    public Disjunction(ArrayList<Conjunction> conjunctions) {
-        this.conjunctions = conjunctions;
-    }
-}
-
-class Conjunction extends Expression {
-    public ArrayList<Comparison> comparisons;
-
-    public Conjunction(ArrayList<Comparison> comparisons) {
-        this.comparisons = comparisons;
-    }
-}
-
-class Comparison extends Expression {
-    public Sum left;
-    public String operator;
-    public Sum right;
-
-    public Comparison(Sum left, String operator, Sum right) {
-        this.left = left;
-        this.operator = operator;
-        this.right = right;
-    }
-}
-
-class Sum extends Expression {
-    public ArrayList<Term> terms;
-
-    public Sum(ArrayList<Term> terms) {
-        this.terms = terms;
-    }
-}
-
-class Term extends Expression {
-    public ArrayList<Power> powers;
-
-    public Term(ArrayList<Power> powers) {
-        this.powers = powers;
-    }
-}
-
-class Power extends Expression {
-    public Factor base;
-    public Power exponent;
-
-    public Power(Factor base, Power exponent) {
-        this.base = base;
-        this.exponent = exponent;
-    }
-}
-
-class Factor extends Expression {
-    public String value;
-
-    public Factor(String value) {
-        this.value = value;
-    }
-}
-
-class NumberLiteral extends Expression {
-    public double value;
-
-    public NumberLiteral(double value) {
-        this.value = value;
-    }
-}
-
-class Identifier extends Expression {
-    public String name;
-
-    public Identifier(String name) {
-        this.name = name;
-    }
-}
-
-class Output extends Expression {
-    public String value;
-
-    public Output(String value) {
-        this.value = value;
-    }
