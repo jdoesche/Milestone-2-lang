@@ -154,7 +154,7 @@ term returns [Exp ast]
 
 power returns [Exp ast]
   : factor { $ast = $factor.ast; }
-    ( '**' p=power { $ast = new BinOp($ast, $p.ast, '**'); } )?
+    ( '**' p=power { $ast = new BinOp($ast, $p.ast, "**"); } )?
   ;
 
 factor returns [Exp ast]

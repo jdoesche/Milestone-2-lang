@@ -1,57 +1,59 @@
-<?xml version="1.0"?>
+<?xml version="1.0" ?>
 <project name="lang" default="parser">
 
-    <!-- ANTLR version -->
-    <property name="antlr.version" value="4.5" />
+<!-- ANTLR version -->
+<property name="antlr.version" value="4.5" />
 
-	<!-- SkeptiCal parser -->
-	<target name="SkeptiCal-check-parser">
-		<condition property="SkeptiCal.parser.uptodate">
-			<and>
-				<uptodate srcfile="src/skeptilang/Skeptical.g" targetfile="src/skeptical/parser/SkepticalParser.java" />
-				<uptodate srcfile="src/skeptical/Skeptical.g" targetfile="src/skeptical/parser/SkeptiCalLexer.java" />
-				<uptodate srcfile="src/skeptical/Skeptical.g" targetfile="src/skeptical/parser/SkeptiCalListener.java" />
-			</and>
-		</condition>
-	</target>
+<!-- SkeptiCal parser -->
+<target name="skeptical-check-parser">
+<condition property="skeptical.parser.uptodate">
+<and>
+<uptodate srcfile="src/skeptical/Skeptical.g" targetfile="src/skeptical/parser/SkepticalParser.java" />
+<uptodate srcfile="src/skeptical/Skeptical.g" targetfile="src/skeptical/parser/SkepticalLexer.java" />
+<uptodate srcfile="src/skeptical/Skeptical.g" targetfile="src/skeptical/parser/SkepticalListener.java" />
+</and>
+</condition>
+</target>
 
-    <target name="Skeptical" depends="Skeptical-check-parser" unless="Skeptical.parser.uptodate">
-        <java jar="lib/antlr-${antlr.version}-complete.jar" dir="src/skeptical/" fork="true" failonerror="true">
-            <arg value="-o" />
-            <arg value="parser/" />
-            <arg value="-package" />
-            <arg value="skeptical.parser" />
-            <arg value="Skeptical.g" />
-        </java>
-    </target>
+<target name="skeptical" depends="skeptical-check-parser" unless="skeptical.parser.uptodate">
+<java jar="lib/antlr-${antlr.version}-complete.jar" dir="src/skeptical/" fork="true" failonerror="true">
+<arg value="-o" />
+<arg value="parser/" />
+<arg value="-no-listener" />
+<arg value="-package" />
+<arg value="skeptical.parser; import static skeptical.AST.*" />
+<arg value="Skeptical.g" />
+</java>
+</target>
 
-    <target name="parser" depends="Skeptical">
-        <!-- No additional steps needed here -->
-    </target>
+<target name="parser" depends="skeptical" >
+</target>
 
     <target name="compile" depends="parser">
+        <mkdir dir="build/classes"/>
         <javac srcdir="src" destdir="build/classes">
-            <classpath>
-                <pathelement path="lib/antlr-${antlr.version}-complete.jar" />
-            </classpath>
-        </javac>
+    <classpath>
+        <pathelement path="lib/antlr-4.5-complete.jar"/>
+    </classpath>
+</javac>
     </target>
 
     <target name="jar" depends="compile">
-        <mkdir dir="build/jar" />
-        <jar destfile="build/jar/skeptical.jar" basedir="build/classes">
-            <zipgroupfileset dir="lib" includes="antlr-${antlr.version}-complete.jar" />
+        <mkdir dir="build/jar"/>
+        <jar destfile="build/jar/Skeptical.jar" basedir="build/classes">
+    <zipgroupfileset dir="lib" includes="antlr-4.5-complete.jar" />
             <manifest>
-                <attribute name="Main-Class" value="skeptical.Interpreter" />
+                <attribute name="Main-Class" value="skeptical.Interpreter"/>
             </manifest>
         </jar>
     </target>
 
     <target name="run" depends="jar">
-        <java jar="build/jar/skeptical.jar" fork="true" />
+        <java jar="build/jar/Skeptical.jar" fork="true"/>
     </target>
 
-    <target name="clean">
-        <delete dir="build" />
-    </target>
+        <target name="clean">
+                <delete dir="build"/>
+        </target>
+
 </project>
