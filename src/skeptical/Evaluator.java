@@ -29,7 +29,7 @@ abstract class Division extends ASTNode {}
 class StaDiv extends Division {
     public ArrayList<StaDecl> idStatements;
 
-    public StaticDivision(ArrayList<StaDecl> idStatements) {
+    public StaDiv(ArrayList<StaDecl> idStatements) {
         this.idStatements = idStatements;
     }
 }
@@ -37,7 +37,6 @@ class StaDiv extends Division {
 class DynDiv extends Division {
     public ArrayList<Statement> statements;
 
-    public DynamicDivision(ArrayList<Statement> statements) {
         this.statements = statements;
     }
 }
