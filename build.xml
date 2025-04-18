@@ -4,6 +4,7 @@
     <!-- ANTLR version -->
     <property name="antlr.version" value="4.5" />
 
+<<<<<<< HEAD
     <!-- SkeptiCal parser -->
     <target name="SkeptiCal-check-parser">
         <condition property="SkeptiCal.parser.uptodate">
@@ -14,6 +15,18 @@
             </and>
         </condition>
     </target>
+=======
+	<!-- SkeptiCal parser -->
+	<target name="SkeptiCal-check-parser">
+		<condition property="SkeptiCal.parser.uptodate">
+			<and>
+				<uptodate srcfile="src/arithlang/ArithLang.g" targetfile="src/arithlang/parser/ArithLangParser.java" />
+				<uptodate srcfile="src/skeptical/Skeptical.g" targetfile="src/skeptical/parser/SkeptiCalLexer.java" />
+				<uptodate srcfile="src/skeptical/Skeptical.g" targetfile="src/skeptical/parser/SkeptiCalListener.java" />
+			</and>
+		</condition>
+	</target>
+>>>>>>> 7edd85fa63a7d78c34fbc4ef80afeb04fb50657a
 
     <target name="SkeptiCal" depends="SkeptiCal-check-parser" unless="SkeptiCal.parser.uptodate">
         <java jar="lib/antlr-${antlr.version}-complete.jar" dir="src/skeptical/" fork="true" failonerror="true">
