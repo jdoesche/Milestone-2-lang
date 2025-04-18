@@ -8,7 +8,7 @@
 	<target name="SkeptiCal-check-parser">
 		<condition property="SkeptiCal.parser.uptodate">
 			<and>
-				<uptodate srcfile="src/skeptical/Skeptical.g" targetfile="src/skeptical/parser/Skeptical.g />
+				<uptodate srcfile="src/arithlang/ArithLang.g" targetfile="src/arithlang/parser/ArithLangParser.java" />
 				<uptodate srcfile="src/skeptical/Skeptical.g" targetfile="src/skeptical/parser/SkeptiCalLexer.java" />
 				<uptodate srcfile="src/skeptical/Skeptical.g" targetfile="src/skeptical/parser/SkeptiCalListener.java" />
 			</and>
