@@ -8,14 +8,14 @@
 	<target name="SkeptiCal-check-parser">
 		<condition property="SkeptiCal.parser.uptodate">
 			<and>
-				<uptodate srcfile="src/arithlang/Skeptical.g" targetfile="src/arithlang/parser/SkepticalParser.java" />
+				<uptodate srcfile="src/skeptilang/Skeptical.g" targetfile="src/skeptical/parser/SkepticalParser.java" />
 				<uptodate srcfile="src/skeptical/Skeptical.g" targetfile="src/skeptical/parser/SkeptiCalLexer.java" />
 				<uptodate srcfile="src/skeptical/Skeptical.g" targetfile="src/skeptical/parser/SkeptiCalListener.java" />
 			</and>
 		</condition>
 	</target>
 
-    <target name="SkeptiCal" depends="SkeptiCal-check-parser" unless="SkeptiCal.parser.uptodate">
+    <target name="Skeptical" depends="Skeptical-check-parser" unless="Skeptical.parser.uptodate">
         <java jar="lib/antlr-${antlr.version}-complete.jar" dir="src/skeptical/" fork="true" failonerror="true">
             <arg value="-o" />
             <arg value="parser/" />
