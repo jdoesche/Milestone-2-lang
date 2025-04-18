@@ -4,33 +4,32 @@
 	<!-- ANTLR version -->
 	<property name="antlr.version" value="4.5" />
 
-	<!-- ArithLang parser -->
-	<target name="arithlang-check-parser">
-		<condition property="arithlang.parser.uptodate">
+	<!-- SkeptiCal parser -->
+	<target name="SkeptiCal-check-parser">
+		<condition property="SkeptiCal.parser.uptodate">
 			<and>
-				<uptodate srcfile="src/arithlang/ArithLang.g" targetfile="src/arithlang/parser/ArithLangParser.java" />
-				<uptodate srcfile="src/arithlang/ArithLang.g" targetfile="src/arithlang/parser/ArithLangLexer.java" />
-				<uptodate srcfile="src/arithlang/ArithLang.g" targetfile="src/arithlang/parser/ArithLangListener.java" />
+				<uptodate srcfile="src/skeptical/Skeptical.g" targetfile="src/skeptical/parser/Skeptical.g />
+				<uptodate srcfile="src/skeptical/Skeptical.g" targetfile="src/skeptical/parser/SkeptiCalLexer.java" />
+				<uptodate srcfile="src/skeptical/Skeptical.g" targetfile="src/skeptical/parser/SkeptiCalListener.java" />
 			</and>
 		</condition>
 	</target>
 
-	<target name="arithlang" depends="arithlang-check-parser" unless="arithlang.parser.uptodate">
-		<java jar="lib/antlr-${antlr.version}-complete.jar" dir="src/arithlang/" fork="true" failonerror="true">
+	<target name="SkeptiCal" depends="Skeptical-check-parser" unless="skeptical.parser.uptodate">
+		<java jar="lib/antlr-${antlr.version}-complete.jar" dir="src/skeptiCal/" fork="true" failonerror="true">
 			<arg value="-o" />
 			<arg value="parser/" />
 			<arg value="-no-listener" />
 			<arg value="-package" />
-			<arg value="arithlang.parser; import static arithlang.AST.*" />
-			<arg value="ArithLang.g" />
+			<arg value="skeptical.parser; import static skeptical.AST.*" />
+			<arg value="Skeptical.g" />
 		</java>
 	</target>
 
-	<target name="parser" depends="arithlang" >
+	<target name="parser" depends="Skeptical" >
 	</target>
 
     	<target name="compile" depends="parser">
-        	<mkdir dir="build/classes"/>
         	<javac srcdir="src" destdir="build/classes">
     			<classpath>
         			<pathelement path="lib/antlr-4.5-complete.jar"/>
@@ -40,16 +39,16 @@
 
     	<target name="jar" depends="compile">
         	<mkdir dir="build/jar"/>
-        	<jar destfile="build/jar/ArithLang.jar" basedir="build/classes">
+        	<jar destfile="build/jar/skeptical.jar" basedir="build/classes">
     			<zipgroupfileset dir="lib" includes="antlr-4.5-complete.jar" />
             		<manifest>
-                		<attribute name="Main-Class" value="arithlang.Interpreter"/>
+                		<attribute name="Main-Class" value="skeptical.Interpreter"/>
             		</manifest>
         	</jar>
     	</target>
 
     	<target name="run" depends="jar">
-        	<java jar="build/jar/ArithLang.jar" fork="true"/>
+        	<java jar="build/jar/skeptical.jar" fork="true"/>
     	</target>
 
         <target name="clean">
