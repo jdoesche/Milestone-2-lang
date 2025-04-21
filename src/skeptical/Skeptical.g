@@ -77,7 +77,7 @@ input returns [Statement ast]
   ;
 
 ifstmt returns [Statement ast]
-    locals [ArrayList<Statement> thenStmts = new ArrayList<>(), elseStmts = new ArrayList<>(); int indentLevel = 0;]
+    locals [ArrayList<Statement> thenStmts = new ArrayList<Statement>(), elseStmts = new ArrayList<Statement>(), int indentLevel = 0]
   : 'IF' cond=expression 'THEN' NEWLINE
     INDENT { indentLevel++; }
     (t=statement { thenStmts.add($t.ast); })* 
