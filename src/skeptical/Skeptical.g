@@ -1,7 +1,7 @@
 grammar Skeptical;
 
 program returns [Program ast]
-    locals [StaDiv staticDiv; DynDiv dynamicDiv]
+    locals [StaDiv staticDiv, DynDiv dynamicDiv]
     : s=static_division
       d=dynamic_division
       {$ast = new Program($s.ast, $d.ast);}
@@ -9,7 +9,7 @@ program returns [Program ast]
 
 static_division returns [StaDiv ast]
     locals [ArrayList<StaDecl> decls]
-    @init { $decls = new ArrayList<StaDecl>(); }
+    @init { $decls = new ArrayList<StaDecl>()}
   : 'STATIC' 'DIVISION.' NEWLINE
     (decl=stadecl { $decls.add($decl.ast); })*  
     { $ast = new StaDiv($decls); }
@@ -90,7 +90,7 @@ ifstmt returns [Statement ast]
   ;
 
 loop_stmt returns [Statement ast]
-    locals [ArrayList<Statement> body = new ArrayList<>(); int indentLevel = 0;]
+    locals [ArrayList<Statement> body = new ArrayList<Statement>(), int indentLevel = 0;]
   : 'START' id=Identifier 'AS' start=expression 'TO' end=expression 'DOING' NEWLINE
     INDENT { indentLevel++; }
     (stmt=statement { body.add($stmt.ast); })* DEDENT
@@ -98,7 +98,7 @@ loop_stmt returns [Statement ast]
   ;
 
 funcdef returns [Statement ast]
-    locals [ArrayList<Statement> body = new ArrayList<>(); int indentLevel = 0;]
+    locals [ArrayList<Statement> body = new ArrayList<Statement>(), int indentLevel = 0;]
   : 'FUNCTION' id=Identifier ('WITH' args=arglist)? '.' NEWLINE
     INDENT { indentLevel++; }
   (stmt=statement { body.add($stmt.ast); })* DEDENT
@@ -111,7 +111,7 @@ callstmt returns [Statement ast]
   { $ast = new CallStmt($id.text, $args.ast); }
 ;
 arglist returns [Exp ast]
-    locals [ArrayList<Exp> argsList = new ArrayList<Exp>();]
+    locals [ArrayList<Exp> argsList = new ArrayList<Exp>()]
   : e=expression { argsList.add($e.ast); }
     (',' e2=expression { argsList.add($e2.ast); })*
     { $ast = argsList; }
