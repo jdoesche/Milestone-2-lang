@@ -9,7 +9,7 @@ program returns [Program ast]
 
 static_division returns [StaDiv ast]
     locals [ArrayList<StaDecl> decls]
-    @init { $decls = new ArrayList<StaDecl>()}
+    @init { $decls = new ArrayList<StaDecl>();}
   : 'STATIC' 'DIVISION.' NEWLINE
     (decl=stadecl { $decls.add($decl.ast); })*  
     { $ast = new StaDiv($decls); }
@@ -34,10 +34,10 @@ constant returns [StaDecl ast]
 @init { Exp valueExp = null; }
   : 'FIX' id=Identifier 'TO' e=expression
     {
-      if (e.ast instanceof IdExp) {
-        throw new RuntimeException("Cannot assign constant to a variable reference like '" + ((IdExp)e.ast).id() + "'"); 
+      if ($e.ast instanceof Identifier) {
+        throw new RuntimeException("Cannot assign constant to a variable reference like '" + ((Identifier)$e.ast).name + "'"); 
       }
-      $ast = new Const($id.text, e.ast);
+      $ast = new Const($id.text, $e.ast);
     }
     '.'
   ;
@@ -77,7 +77,7 @@ input returns [Statement ast]
   ;
 
 ifstmt returns [Statement ast]
-    locals [ArrayList<Statement> thenStmts = new ArrayList<Statement>(), elseStmts = new ArrayList<Statement>(), int indentLevel = 0]
+    locals [ArrayList<Statement> thenStmts = new ArrayList<Statement>(), ArrayList<Statement> elseStmts = new ArrayList<Statement>(), int indentLevel = 0]
   : 'IF' cond=expression 'THEN' NEWLINE
     INDENT { indentLevel++; }
     (t=statement { thenStmts.add($t.ast); })* 

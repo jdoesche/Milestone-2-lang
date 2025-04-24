@@ -44,10 +44,10 @@ class DynDiv extends Division {
 
 
 class StaDecl extends ASTNode {
-    public String Identifier;
+    public String identifier;
 
     public StaDecl(String identifier) {
-        this.Identifier = Identifier;
+        this.identifier = identifier;
     }
 }
 
@@ -59,7 +59,7 @@ class Assign extends Statement {
     public String term;
 
     public Assign(String identifier, Expression expression, String term) {
-        this.Identifier = identifier;
+        this.identifier = identifier;
         this.expression = expression;
         this.term = term;
     }
@@ -97,13 +97,13 @@ class IfStmt extends Statement {
 }
 
 class LoopStmt extends Statement {
-    public String Identifier;
+    public String identifier;
     public int start;
     public int end;
     public ArrayList<Statement> body;
 
     public LoopStmt(String identifier, int start, int end, ArrayList<Statement> body) {
-        this.Identifier = Identifier;
+        this.identifier = identifier;
         this.start = start;
         this.end = end;
         this.body = body;
@@ -114,7 +114,7 @@ class CallStmt extends Statement {
     public String functionName;
     public ArrayList<Expression> arguments;
 
-    public CallStmt(String functionName, V<Expression> arguments) {
+    public CallStmt(String functionName, ArrayList<Expression> arguments) {
         this.functionName = functionName;
         this.arguments = arguments;
     }
@@ -140,8 +140,8 @@ class Rand extends Statement {
     public int max;
 
     // Constructor
-    public Rand(String iIentifier, int min, int max) {
-        this.Identifier = identifier;
+    public Rand(String identifier, int min, int max) {
+        this.identifier = identifier;
         this.min = min;
         this.max = max;
     }
