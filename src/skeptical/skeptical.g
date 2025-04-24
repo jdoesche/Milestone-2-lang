@@ -1,4 +1,4 @@
-grammar Skeptical;
+grammar skeptical;
 
 program returns [Program ast]
     locals [StaDiv staticDiv, DynDiv dynamicDiv]
