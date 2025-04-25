@@ -1,11 +1,9 @@
 package skeptical;
 
-import java.util.Hashtable;
-
 /**
  * Representation of an environment for the Skeptical language,
  * which maps variable names to runtime values.
- * 
+ *
  * Compatible with the AST structure and visitor-based interpretation.
  */
 public interface Env {
@@ -71,26 +69,47 @@ public interface Env {
 
 	/**
 	 * Represents a global environment with mutable bindings.
+	 * Uses a fixed-size array to simulate a map structure.
 	 */
 	public static class GlobalEnv implements Env {
-		private final Hashtable<String, Value> map;
+		private static final int MAX_BINDINGS = 100;
+		private final String[] keys;
+		private final Value[] values;
+		private int size;
 
 		public GlobalEnv() {
-			map = new Hashtable<>();
+			keys = new String[MAX_BINDINGS];
+			values = new Value[MAX_BINDINGS];
+			size = 0;
 		}
 
 		public synchronized Value get(String searchVar) {
-			if (map.containsKey(searchVar))
-				return map.get(searchVar);
+			for (int i = 0; i < size; i++) {
+				if (keys[i].equals(searchVar)) {
+					return values[i];
+				}
+			}
 			throw new LookupException("No binding found for name: " + searchVar);
 		}
 
 		public synchronized void extend(String var, Value val) {
-			map.put(var, val);
+			for (int i = 0; i < size; i++) {
+				if (keys[i].equals(var)) {
+					values[i] = val; // overwrite existing
+					return;
+				}
+			}
+			if (size < MAX_BINDINGS) {
+				keys[size] = var;
+				values[size] = val;
+				size++;
+			} else {
+				throw new RuntimeException("GlobalEnv capacity exceeded.");
+			}
 		}
 
 		public boolean isEmpty() {
-			return map.isEmpty();
+			return size == 0;
 		}
 	}
 }

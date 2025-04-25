@@ -8,9 +8,9 @@
 <target name="skeptical-check-parser">
 <condition property="skeptical.parser.uptodate">
 <and>
-<uptodate srcfile="src/skeptical/Skeptical.g" targetfile="src/skeptical/parser/SkepticalParser.java" />
-<uptodate srcfile="src/skeptical/Skeptical.g" targetfile="src/skeptical/parser/SkepticalLexer.java" />
-<uptodate srcfile="src/skeptical/Skeptical.g" targetfile="src/skeptical/parser/SkepticalListener.java" />
+<uptodate srcfile="src/skeptical/skeptical.g" targetfile="src/skeptical/parser/skepticalParser.java" />
+<uptodate srcfile="src/skeptical/skeptical.g" targetfile="src/skeptical/parser/skepticalLexer.java" />
+<uptodate srcfile="src/skeptical/skeptical.g" targetfile="src/skeptical/parser/skepticalListener.java" />
 </and>
 </condition>
 </target>
@@ -22,7 +22,7 @@
 <arg value="-no-listener" />
 <arg value="-package" />
 <arg value="skeptical.parser; import static skeptical.AST.*" />
-<arg value="Skeptical.g" />
+<arg value="skeptical.g" />
 </java>
 </target>
 
@@ -40,7 +40,7 @@
 
     <target name="jar" depends="compile">
         <mkdir dir="build/jar"/>
-        <jar destfile="build/jar/Skeptical.jar" basedir="build/classes">
+        <jar destfile="build/jar/skeptical.jar" basedir="build/classes">
     <zipgroupfileset dir="lib" includes="antlr-4.5-complete.jar" />
             <manifest>
                 <attribute name="Main-Class" value="skeptical.Interpreter"/>
@@ -49,7 +49,7 @@
     </target>
 
     <target name="run" depends="jar">
-        <java jar="build/jar/Skeptical.jar" fork="true"/>
+        <java jar="build/jar/skeptical.jar" fork="true"/>
     </target>
 
         <target name="clean">

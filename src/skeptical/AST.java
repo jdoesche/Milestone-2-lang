@@ -3,34 +3,27 @@ package skeptical;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * This class hierarchy represents expressions in the abstract syntax tree
- * manipulated by this interpreter.
- * 
- * @author hridesh
- * 
- */
 public interface AST {
     public static abstract class ASTNode implements AST {
         public abstract <T> T accept(Visitor<T> visitor, Env env);
     }
 
     public static class Program extends ASTNode {
-    StaDiv _staticDiv;
-    DynDiv _dynamicDiv;
+    	StaDiv _staticDiv;
+    	DynDiv _dynamicDiv;
 
-    public Program(StaDiv staticDiv, DynDiv dynamicDiv) {
-        _staticDiv = staticDiv;
-        _dynamicDiv = dynamicDiv;
-    }
+    	public Program(StaDiv staticDiv, DynDiv dynamicDiv) {
+        	_staticDiv = staticDiv;
+        	_dynamicDiv = dynamicDiv;
+    	}
 
-    public StaDiv staticDivision() { return _staticDiv; }
-    public DynDiv dynamicDivision() { return _dynamicDiv; }
+    	public StaDiv staticDivision() { return _staticDiv; }
+    	public DynDiv dynamicDivision() { return _dynamicDiv; }
 
-    public <T> T accept(Visitor<T> visitor, Env env) {
-        return visitor.visit(this, env);
-    }
-}
+    	public <T> T accept(Visitor<T> visitor, Env env) {
+        	return visitor.visit(this, env);
+    	}
+	}
 
     public static abstract class Division extends ASTNode {}
 
@@ -129,7 +122,7 @@ public interface AST {
     	public String id() { return id; }
    	public Exp value() { return value; }
 
-    	@Override
+
     	public <T> T accept(Visitor<T> visitor, Env env) {
         	return visitor.visit(this, env);
     	}
@@ -147,7 +140,6 @@ public interface AST {
         	return id;
     	}
 
-    	@Override
     	public <T> T accept(Visitor<T> visitor, Env env) {
         	return visitor.visit(this, env);
     	}
@@ -164,7 +156,7 @@ public interface AST {
         	return value;
     	}
 
-    	@Override
+
     	public <T> T accept(Visitor<T> visitor, Env env) {
         	return visitor.visit(this, env);
     	}
@@ -180,16 +172,16 @@ public interface AST {
         	return value;
     	}
 
-    	@Override
+
     	public <T> T accept(Visitor<T> visitor, Env env) {
         	return visitor.visit(this, env);
     	}
      }
-    public static abstract class BinaryOpExp extends Exp {
+    public static abstract class BinaryExp extends Exp {
     	protected final Exp left;
     	protected final Exp right;
 
-    	public BinaryOpExp(Exp left, Exp right) {
+    	public BinaryExp(Exp left, Exp right) {
         	this.left = left;
         	this.right = right;
     	}
@@ -198,7 +190,7 @@ public interface AST {
     	public Exp right() { return right; }
      }
     
-     public static class DisjExp extends BinaryOpExp {
+     public static class DisjExp extends BinaryExp {
     	public DisjExp(Exp left, Exp right) {
         	super(left, right);
     	}
@@ -207,7 +199,7 @@ public interface AST {
         	return visitor.visit(this, env);
     	}
      }
-    public static class ConjExp extends BinaryOpExp {
+    public static class ConjExp extends BinaryExp {
     	public ConjExp(Exp left, Exp right) {
         	super(left, right);
     	}
@@ -217,7 +209,7 @@ public interface AST {
     	}
      }
 
-     public static class CompExp extends BinaryOpExp {
+     public static class CompExp extends BinaryExp {
     	private final String operator;
 
     	public CompExp(Exp left, String operator, Exp right) {
@@ -232,7 +224,7 @@ public interface AST {
     	}
       }
 
-     public static class SumExp extends BinaryOpExp {
+     public static class SumExp extends BinaryExp {
     	private final String operator;
 
     	public SumExp(Exp left, String operator, Exp right) {
@@ -247,8 +239,8 @@ public interface AST {
     	}
     }
 
-    public static class TermExp extends BinaryOpExp {
-	private final String operator;
+    public static class TermExp extends BinaryExp {
+	    String operator;
 
     	public TermExp(Exp left, String operator, Exp right) {
         	super(left, right);
@@ -262,7 +254,7 @@ public interface AST {
     	}
      }
 
-    public static class PowExp extends BinaryOpExp {
+    public static class PowExp extends BinaryExp {
     	public PowExp(Exp left, Exp right) {
         	super(left, right);
     	}
@@ -284,7 +276,6 @@ public interface AST {
        	 return expr;
     	}
 
-   	 @Override
     	public <T> T accept(Visitor<T> visitor, Env env) {
         	return visitor.visit(this, env);
     	}
@@ -301,7 +292,6 @@ public interface AST {
         	return expr;
     	}
 
-    	@Override
     	public <T> T accept(Visitor<T> visitor, Env env) {
         	return visitor.visit(this, env);
     	}
@@ -324,7 +314,6 @@ public interface AST {
         	return expr;
     	}
 
-    	@Override
     	public <T> T accept(Visitor<T> visitor, Env env) {
         	return visitor.visit(this, env);
     	}
@@ -350,7 +339,6 @@ public interface AST {
     	public Exp getExpression() { return expression; }
     	public String getType() { return type; }
 
-    	@Override
     	public <T> T accept(Visitor<T> visitor, Env env) {
         	return visitor.visit(this, env);
     	}
@@ -367,7 +355,6 @@ public interface AST {
 
     	public String getOutput() { return output; }
 
-    	@Override
     	public <T> T accept(Visitor<T> visitor, Env env) {
         	return visitor.visit(this, env);
     	}
@@ -386,7 +373,6 @@ public interface AST {
     	public String getIdentifier() { return identifier; }
     	public String getPrompt() { return prompt; }
 
-    	@Override
     	public <T> T accept(Visitor<T> visitor, Env env) {
         	return visitor.visit(this, env);
     	}
@@ -408,7 +394,6 @@ public interface AST {
     	public List<Statement> getThenBranch() { return thenBranch; }
     	public List<Statement> getElseBranch() { return elseBranch; }
 
-    	@Override
     	public <T> T accept(Visitor<T> visitor, Env env) {
         	return visitor.visit(this, env);
     	}
@@ -416,52 +401,50 @@ public interface AST {
 
 	
       public static class LoopStmt extends Statement {
-   	 private String identifier;
-    	 private int startValue;
-   	 private int endValue;
-   	 private List<Statement> body;
+   	 	private String identifier;
+    	private int startValue;
+   	 	private int endValue;
+   	 	private List<Statement> body;
 
-   	 public LoopStmt(String identifier, int startValue, int endValue, List<Statement> body) {
+   	 	public LoopStmt(String identifier, int startValue, int endValue, List<Statement> body) {
          	this.identifier = identifier;
          	this.startValue = startValue;
          	this.endValue = endValue;
          	this.body = body;
     	 }
 
-   	 public String getIdentifier() { return identifier; }
-   	 public int getStartValue() { return startValue; }
-   	 public int getEndValue() { return endValue; }
-   	 public List<Statement> getBody() { return body; }
+   	 	public String getIdentifier() { return identifier; }
+   	 	public int getStartValue() { return startValue; }
+   	 	public int getEndValue() { return endValue; }
+   	 	public List<Statement> getBody() { return body; }
 
-   	 @Override
-   	 public <T> T accept(Visitor<T> visitor, Env env) {
+   	 	public <T> T accept(Visitor<T> visitor, Env env) {
         	return visitor.visit(this, env);
     	 }
-       }
+	    }
 	
-       public static class CallStmt extends Statement {
-    	  private String identifier;
-    	  private List<Exp> arguments; // can be empty if no arguments
+    public static class CallStmt extends Statement {
+    	private String identifier;
+    	private List<Exp> arguments; // can be empty if no arguments
 
-   	   public CallStmt(String identifier, List<Exp> arguments) {
-        	this.identifier = identifier;
-        	this.arguments = arguments;
-    	   }
+   	   	public CallStmt(String identifier, List<Exp> arguments) {
+        this.identifier = identifier;
+        this.arguments = arguments;
+}
 
    	    public String getIdentifier() { return identifier; }
    	    public List<Exp> getArguments() { return arguments; }
 
-   	   @Override
-   	   public <T> T accept(Visitor<T> visitor, Env env) {
+   	   	public <T> T accept(Visitor<T> visitor, Env env) {
         	return visitor.visit(this, env);
-    	   }
-       }
+    	}
+    }
 
-      public static class FuncDef extends Statement {
-    	   private String name;
- 	   private List<String> parameters;
- 	   private List<Statement> body;
- 	   private String returnIdentifier;
+    public static class FuncDef extends Statement {
+    	private String name;
+ 	    private List<String> parameters;
+ 	    private List<Statement> body;
+ 	    private String returnIdentifier;
 
  	   public FuncDef(String name, List<String> parameters, List<Statement> body, String returnIdentifier) {
         	this.name = name;
@@ -475,14 +458,13 @@ public interface AST {
  	   public List<Statement> getBody() { return body; }
  	   public String getReturnIdentifier() { return returnIdentifier; }
 
- 	   @Override
  	   public <T> T accept(Visitor<T> visitor, Env env) {
         	return visitor.visit(this, env);
  	   }
-       }
+    }
 
 
-       public static class Rand extends Statement {
+    public static class Rand extends Statement {
  	   private String identifier;
  	   private int min;
  	   private int max;
@@ -497,41 +479,40 @@ public interface AST {
  	   public int getMin() { return min; }
  	   public int getMax() { return max; }
 
- 	   @Override
  	   public <T> T accept(Visitor<T> visitor, Env env) {
      		return visitor.visit(this, env);
     	    }
-        }
+    }
 
 
 
     public interface Visitor<T> {
         T visit(AST.Program p, Env env);
-    	T visit(AST.StaticDivision d, Env env);
-    	T visit(AST.DynamicDivision d, Env env);
+    	T visit(AST.StaDiv d, Env env);
+    	T visit(AST.DynDiv d, Env env);
         T visit(AST.ProgId sd, Env env);
         T visit(AST.Auth sd, Env env);
         T visit(AST.Date sd, Env env);
         T visit(AST.Const sd, Env env);
-	T visit(AST.IdExp e, Env env);
-	T visit(AST.NumExp e, Env env);
-	T visit(AST.StrExp e, Env env);
-	T visit(AST.DisjExp e, Env env);
-	T visit(AST.ConjExp e, Env env);
-	T visit(AST.CompExp e, Env env);
-	T visit(AST.SumExp e, Env env);
-	T visit(AST.TermExp e, Env env);
-	T visit(AST.PowExp e, Env env);
-	T visit(AST.FactorExp e, Env env);
-   	T visit(AST.GroupExp e, Env env);
+		T visit(AST.IdExp e, Env env);
+		T visit(AST.NumExp e, Env env);
+		T visit(AST.StrExp e, Env env);
+		T visit(AST.DisjExp e, Env env);
+		T visit(AST.ConjExp e, Env env);
+		T visit(AST.CompExp e, Env env);
+		T visit(AST.SumExp e, Env env);
+		T visit(AST.TermExp e, Env env);
+		T visit(AST.PowExp e, Env env);
+		T visit(AST.FactorExp e, Env env);
+   		T visit(AST.GroupExp e, Env env);
     	T visit(AST.UnaryOpExp e, Env env);
-	T visit(AST.Assign dd, Env env);
-	T visit(AST.Print dd, Env env);
-	T visit(AST.Input dd, Env env);
-	T visit(AST.IfStmt dd, Env env);
-	T visit(AST.LoopStmt dd, Env env);
-	T visit(AST.CallStmt dd, Env env);
-	T visit(AST.FuncDef dd, Env env);
-	T visit(AST.Rand dd, Env env);
+		T visit(AST.Assign dd, Env env);
+		T visit(AST.Print dd, Env env);
+		T visit(AST.Input dd, Env env);
+		T visit(AST.IfStmt dd, Env env);
+		T visit(AST.LoopStmt dd, Env env);
+		T visit(AST.CallStmt dd, Env env);
+		T visit(AST.FuncDef dd, Env env);
+		T visit(AST.Rand dd, Env env);
 	}
 }
